@@ -1,0 +1,11 @@
+# Example config
+# General settings
+[settings]
+port=5000
+
+# Setting for each tag, each tag is identified by its MAC address.
+[tags."00:11:22:33:44:55"]
+name="kitchen"
+
+[tags."AA:BB:CC:DD:EE:FF"]
+name="balcony"
