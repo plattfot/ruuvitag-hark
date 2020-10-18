@@ -66,10 +66,11 @@ Options:
     try:
         opts, args.shell_args = getopt.gnu_getopt(
             argv[1:],
-            "hT:",
+            "hT:p:",
             ["help",
              "tag=",
              "config=",
+             "port=",
              ])
     except getopt.GetoptError as err:
         parser.error(err)
@@ -83,6 +84,8 @@ Options:
             args.tags[mac_name[0].lower()] = mac_name[1]
         elif option == "--config":
             args.config = argument
+        elif option in ("-p", "--port"):
+            args.port = int(argument)
 
     return parser, args
 
