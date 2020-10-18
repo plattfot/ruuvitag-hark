@@ -136,7 +136,7 @@ def run(argv):
 
     if args.config:
         with open(args.config) as config_file:
-            args = parse_config(toml.load(config_file), parser, args)
+            args = parse_config(toml.load(config_file), args, parser)
 
     all_data = {}
     setup_ruuvi(args.tags, all_data)
