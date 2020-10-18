@@ -45,6 +45,12 @@ class ArgparseFaux:
         print(f"{self.prog}: {message}\nTry `{self.prog} --help' for more information.")
         sys.exit(errno)
 
+class Arguments:
+    def __init__(self):
+        self.tags = {}
+        self.config = None
+        self.port=None
+
 def parse_arguments(argv):
     parser = ArgparseFaux(prog=os.path.basename(argv[0]))
     helpstring=f"""usage: {parser.prog} [OPTIONS]...
@@ -56,11 +62,6 @@ Options:
   -p, --port PORT      Set the port number, default 5000
   -h, --help           Print this message then exits
 """
-    class Arguments:
-        def __init__(self):
-            self.tags = {}
-            self.config = None
-            self.port=None
     args = Arguments()
     try:
         opts, args.shell_args = getopt.gnu_getopt(
@@ -79,27 +80,29 @@ Options:
             sys.exit(0)
         elif option in ("-T", "--tag"):
             mac_name = argument.split('=')
-            args.tags[mac_name[0]] = mac_name[1]
+            args.tags[mac_name[0].lower()] = mac_name[1]
         elif option == "--config":
             args.config = argument
 
     return parser, args
 
-def parse_config(parser, args):
-    if args.config:
-        with open(args.config) as config_file:
-            config = toml.load(config_file)
-            for mac, data in config['tags'].items():
-                try:
-                    if not mac in args.tags:
-                        args.tags[mac] = data['name']
-                except KeyError:
-                    pass
-            if not args.port:
-                try:
-                    args.port = config['settings']['port']
-                except KeyError:
-                    pass
+def parse_config(config, args, parser):
+    try:
+        for name, data in config['tags'].items():
+            try:
+                mac_lower = data['mac'].lower()
+                if not mac_lower in args.tags:
+                    args.tags[mac_lower] = name
+            except KeyError:
+                pass
+    except KeyError:
+        pass
+
+    if not args.port:
+        try:
+            args.port = config['settings']['port']
+        except KeyError:
+            pass
     return args
 
 def setup_ruuvi(tags, all_data):
@@ -128,9 +131,11 @@ def setup_routes(app, all_data):
 def run(argv):
     parser, args = parse_arguments(argv)
 
-    args = parse_config(parser, args)
-    all_data = {}
+    if args.config:
+        with open(args.config) as config_file:
+            args = parse_config(toml.load(config_file), parser, args)
 
+    all_data = {}
     setup_ruuvi(args.tags, all_data)
     # Setup and start web application
     app = web.Application()
