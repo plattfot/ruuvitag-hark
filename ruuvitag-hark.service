@@ -1,0 +1,11 @@
+[Unit]
+Description=Simple http server listening on ruuvitags
+After=multi-user.target
+
+[Service]
+Type=simple
+Environment=RUUVI_BLE_ADAPTER=Bleson
+ExecStart=%h/.local/bin/ruuvitag-hark --config=%h/.config/ruuvitag-hark/config.toml
+
+[Install]
+WantedBy=default.target
