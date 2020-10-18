@@ -129,5 +129,7 @@
   python-aiohttp
   python-toml
   python-pep517
+  python-pytest
+  python-tox
   ))
 
