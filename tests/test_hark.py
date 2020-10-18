@@ -47,7 +47,7 @@ def test_parse_arguments_tag_long_multiple():
     ])
 
     assert args.tags['00:00:00:00:00:00'] == 'kitchen'
-    assert args.tags['aa:bb:cc:dd:ee:ff'] == 'bathroom'
+    assert args.tags['AA:BB:CC:DD:EE:FF'] == 'bathroom'
 
 def test_parse_arguments_tag_short():
     _, args = ruuvitag.hark.parse_arguments(['test', '-T00:00:00:00:00:00=kitchen'])
@@ -83,7 +83,7 @@ def test_parse_arguments_tag_long_multiple():
     ])
 
     assert args.tags['00:00:00:00:00:00'] == 'kitchen'
-    assert args.tags['aa:bb:cc:dd:ee:ff'] == 'bathroom'
+    assert args.tags['AA:BB:CC:DD:EE:FF'] == 'bathroom'
 
     _, args = ruuvitag.hark.parse_arguments([
         'test',
@@ -92,7 +92,7 @@ def test_parse_arguments_tag_long_multiple():
     ])
 
     assert args.tags['00:00:00:00:00:00'] == 'kitchen'
-    assert args.tags['aa:bb:cc:dd:ee:ff'] == 'bathroom'
+    assert args.tags['AA:BB:CC:DD:EE:FF'] == 'bathroom'
 
 def test_parse_arguments_name_dupes():
     _, args = ruuvitag.hark.parse_arguments([
@@ -102,7 +102,7 @@ def test_parse_arguments_name_dupes():
     ])
 
     assert args.tags['00:00:00:00:00:00'] == 'kitchen'
-    assert args.tags['aa:bb:cc:dd:ee:ff'] == 'kitchen'
+    assert args.tags['AA:BB:CC:DD:EE:FF'] == 'kitchen'
 
 def test_parse_config():
     parser = ruuvitag.hark.ArgparseFaux(prog='test')
@@ -119,7 +119,7 @@ mac = "AA:BB:CC:DD:EE:FF"
 port = 6000
 """)
     args = ruuvitag.hark.parse_config(config, args, parser)
-    assert args.tags['aa:bb:cc:dd:ee:ff'] == 'bathroom'
+    assert args.tags['AA:BB:CC:DD:EE:FF'] == 'bathroom'
     assert args.tags['00:00:00:00:00:00'] == 'kitchen'
     assert args.port == 6000
 
@@ -129,16 +129,16 @@ def test_parse_config_mac_dupes():
 
     config = toml.loads("""
 [tags.bathroom1]
-mac = "AA:BB:CC:DD:EE:FF"
+mac = "aa:bb:cc:dd:ee:ff"
 
 [tags.bathroom2]
-mac = "aa:bb:cc:dd:ee:ff"
+mac = "AA:BB:CC:DD:EE:FF"
 
 """)
     args = ruuvitag.hark.parse_config(config, args, parser)
 
-    assert args.tags['aa:bb:cc:dd:ee:ff'] == 'bathroom1'
-    assert not 'AA:BB:CC:DD:EE:FF' in args.tags
+    assert args.tags['AA:BB:CC:DD:EE:FF'] == 'bathroom1'
+    assert not 'aa:bb:cc:dd:ee:ff' in args.tags
 
 def test_parse_config_commandline_override_tag():
     parser, args = ruuvitag.hark.parse_arguments([
@@ -155,7 +155,7 @@ mac = "AA:BB:CC:DD:EE:FF"
 """)
 
     args = ruuvitag.hark.parse_config(config, args, parser)
-    assert args.tags['aa:bb:cc:dd:ee:ff'] == 'bathroom'
+    assert args.tags['AA:BB:CC:DD:EE:FF'] == 'bathroom'
     assert args.tags['00:00:00:00:00:00'] == 'balcony'
 
 def test_parse_config_commandline_override_port():
@@ -171,9 +171,3 @@ port = 5000
 
     args = ruuvitag.hark.parse_config(config, args, parser)
     assert args.port == 6000
-
-
-
-
-
-

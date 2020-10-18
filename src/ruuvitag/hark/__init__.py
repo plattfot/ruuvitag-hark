@@ -81,7 +81,7 @@ Options:
             sys.exit(0)
         elif option in ("-T", "--tag"):
             mac_name = argument.split('=')
-            args.tags[mac_name[0].lower()] = mac_name[1]
+            args.tags[mac_name[0].upper()] = mac_name[1]
         elif option == "--config":
             args.config = argument
         elif option in ("-p", "--port"):
@@ -93,9 +93,9 @@ def parse_config(config, args, parser):
     try:
         for name, data in config['tags'].items():
             try:
-                mac_lower = data['mac'].lower()
-                if not mac_lower in args.tags:
-                    args.tags[mac_lower] = name
+                mac_upper = data['mac'].upper()
+                if not mac_upper in args.tags:
+                    args.tags[mac_upper] = name
             except KeyError:
                 pass
     except KeyError:
