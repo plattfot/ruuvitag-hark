@@ -52,3 +52,20 @@ $ curl localhost:5000/data|jq
   }
 }
 ```
+### Using systemd
+
+Simply copy the `ruuvitag-hark.service` to
+`$XDG_CONFIG_HOME/systemd/user` (if `XDG_CONFIG_HOME` is not set use
+`$HOME/.config`).
+
+Create a `config.toml` at `$XDG_CONFIG_HOME/ruuvitag-hark/` (you can
+use the `examples/example-config.toml` as a template).
+
+Then run `loginctl enable-linger $USER` to allow your user to run
+processes without being logged in. Reload the systemd daemon
+`systemctl --user daemon-reload`. And enable and start the
+`ruuvitag-hark.service` by running:
+
+```
+systemctl --user enable --now ruuvitag-hark.service
+```
